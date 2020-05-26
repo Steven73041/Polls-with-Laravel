@@ -1,0 +1,12 @@
+.table tbody tr:nth-child(even), ul:not(.navbar-nav) > li:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+.table tbody tr:hover, ul.list-group > li:hover {
+    background-color: #2779bd;
+}
+
+.table tbody tr:hover td, .table tbody tr:hover th,
+ul.list-group > li:hover {
+    color: #fff;
+}
