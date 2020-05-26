@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('content')
     <div class="card">
+        <div class="card-header">
+            {{$poll->question}}
+        </div>
         <div class="card-body">
-            <div class="card-header">
-                {{$poll->question}}
-            </div>
-            <form method="POST" action="{{route('vote.store')}}">
+            <form method="POST" action="{{route('vote.store')}}" id="vote">
                 <div class="form-group">
                     <input class="form-control" type="text" name="answer[]" id="answer-{{$poll->id}}" required/>
                 </div>

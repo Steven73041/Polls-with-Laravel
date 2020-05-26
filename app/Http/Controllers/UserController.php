@@ -78,12 +78,14 @@ class UserController extends Controller {
             return redirect(route('viewCreateUsers'))->withErrors($validator)->withInput();
         }
         foreach ($request->email as $email) {
-            $user = User::create([
+            $password = $passwords[rand(0, 4)];
+            User::create([
                 'name' => 'Test 1',
                 'email' => $email,
-                'password' => Hash::make($passwords[rand(0, 4)])
+                'password' => Hash::make($password),
+
             ]);
-            Mail::to($email)->send(new UsersCreated($email));
+            Mail::to($email)->send(new UsersCreated($email, $password));
         }
 
         Log::create([
@@ -124,8 +126,7 @@ class UserController extends Controller {
         ]);
 
         if ($request->send_email == 1) {
-            dd($request->send_email);
-            Mail::to($user->email)->send(new UsersCreated($user->email));
+            Mail::to($user->email)->send(new UsersCreated($user->email, $request->password));
         }
 
         Log::create([
