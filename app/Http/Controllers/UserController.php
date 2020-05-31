@@ -62,34 +62,38 @@ class UserController extends Controller {
     public function createUsers(Request $request) {
         $passwords = ['nvi2y922lHPrVwB', 'Y262lx7gh9fYNor', 'AW8fPjMOVBC63Nj', 'ZnP91zyNEA0ss8T', '3f7J5E4BH46375N'];
         $validator = Validator::make($request->all(), [
-            'email' => 'array|required|max:100|unique:users',
-            'email.*' => 'regex:/^.+@.+$/i',
+            'email' => 'array|required|min:1',
+            'name' => 'array|required|min:1',
+            'email.*' => 'required|regex:/^.+@.+$/i|max:100|unique:users,email|min:7|distinct',
+            'name.*' => 'required|max:100|unique:users,name|min:5|string|distinct',
         ], $errors = [
-            'firstName.required' => 'Please enter a valid First Name with maximum 50 characters',
-            'lastName.required' => 'Please enter a valid Last Name with maximum 50 characters',
-            'email.regex' => 'Please enter a valid e-mail address',
-            'email.unique' => 'This e-mail is already in use',
-            'email.min' => 'Your email address should be 7 characters at minimum',
-            'firstName.regex' => 'Only letters allowed for First Name',
-            'lastName.regex' => 'Only letters allowed for First Name',
+            'name.required' => 'Παρακαλώ εισάγεται ονοματεπώνυμο',
+            'name.max' => 'Παρακαλώ εισάγεται ονοματεπώνυμο μέχρι 100 χαρακτήρες',
+            'email.regex' => 'Παρακαλώ εισάγεται ένα έγκυρο e-mail',
+            'email.unique' => 'Το e-mail υπάρχει ήδη',
+            'name.min' => 'Το ονοματεπώνυμο πρέπει να έχει πάνω από 4 χαρακτήρες',
+            'email.min' => 'Το e-mail πρέπει να έχει πάνω από 6 χαρακτήρες',
         ]);
 
         if ($validator->fails()) {
-            return redirect(route('viewCreateUsers'))->withErrors($validator)->withInput();
+            return redirect(route('user.viewCreateUsers'))->withErrors($validator)->withInput();
         }
+        $i = 0;
         foreach ($request->email as $email) {
             $password = $passwords[rand(0, 4)];
             User::create([
-                'name' => 'Test 1',
+                'name' => $request->name[$i],
                 'email' => $email,
                 'password' => Hash::make($password),
+                'role' => 2
 
             ]);
             Mail::to($email)->send(new UsersCreated($email, $password));
+            $i++;
         }
 
         Log::create([
-            'action' => 'Δημιουργία χρηστών: ' . explode(', ', $request->email),
+            'action' => 'Δημιουργία χρηστών: ' . implode(', ', $request->email),
             'user_id' => Auth::user()->id,
         ]);
         return view('users.users_create');

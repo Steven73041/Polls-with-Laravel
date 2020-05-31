@@ -1,6 +1,6 @@
-<html>
+<html lang="el">
 <body>
-<h3>Hello, <a href="{{route('home')}}" target="_new">Login Here</a></h3>
+<h3>{{__('Γεια σου ').$user->name.__(' Συνδέσου')}} <a href="{{route('home')}}" target="_new">{{'εδώ'}}</a></h3>
 <table class="table">
     <tr>
         <th>{{__('Username')}}</th>

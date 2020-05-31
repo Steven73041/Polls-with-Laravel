@@ -17,15 +17,16 @@
                     <form class="form" id="create_users" action="{{route('createUsers')}}" method="post">
                         <div class="form-group">
                             <div class="col-sm-6">
-                                <label for="">{{__('Εισάγεται τα e-mails')}}</label>
-                                <input type="email" name="email[]" class="form-control mb-3" placeholder="email"/>
+                                <label for="email">{{__('Εισάγεται τα e-mails και τα ονόματα των χρηστών')}}</label>
+                                <input type="email" id="email" name="email[]" class="form-control mb-3" placeholder="email"/>
+                                <input type="text" name="name[]" class="form-control mb-3" placeholder="Ονοματεπώνυμο"/>
                                 <button class="btn btn-secondary add" title="{{__('Προσθήκη email')}}">+</button>
                                 <button class="delete btn btn-danger" title="{{__('Αφαίρεση email')}}">-</button>
                             </div>
                             <div class="col-sm-6">
-                                <label for="exampleFormControlSelect2">{{__('Κατηγορίες')}}</label>
+                                <label for="categories">{{__('Κατηγορίες')}}</label>
                                 @if(!empty($categories))
-                                    <select multiple class="form-control" id="exampleFormControlSelect2" required>
+                                    <select multiple class="form-control" id="categories" required>
                                         @foreach($categories as $category)
                                             <option value="{{$category->id}}">{{$category->name}}</option>
                                         @endforeach
