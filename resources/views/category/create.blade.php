@@ -22,7 +22,7 @@
         <label for="category">{{__('Κατηγορία')}}</label>
         <input type="text" name="name" class="form-control" required id="category"/>
         @csrf
-        <input type="submit" class="btn btn-primary" name="submit" value="{{__('Αποθήκευση')}}"/>
+        <input type="submit" class="btn btn-primary mt-3" name="submit" value="{{__('Αποθήκευση')}}"/>
     </form>
     <a class="btn btn-secondary" href="javascript:history.back()">{{__('Πίσω')}}</a>
 @endsection

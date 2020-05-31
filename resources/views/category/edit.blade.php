@@ -32,10 +32,10 @@
         <input type="submit" class="btn btn-danger" value="{{__('Διαγραφή')}}" name="submit"/>
     </form>
 
-    <a class="btn btn-secondary" href="javascript:history.back()">{{__('Πίσω')}}</a>
+    <a class="btn btn-secondary mb-3" href="javascript:history.back()">{{__('Πίσω')}}</a>
 
     @if($category->polls)
-        <table class="table">
+        <table class="table mb-3">
             <thead>
             <tr>
                 <th scope="col">{{__('Ερώτηση')}}</th>
