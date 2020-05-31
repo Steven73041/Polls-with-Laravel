@@ -61,25 +61,91 @@
                 </tbody>
             </table>
         </div>
-        @if(count($poll->votes)>0)
-            <div class="row">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">{{__('Απάντηση')}}</th>
-                        <th scope="col">{{__('Ψήφοι')}}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($poll->votes()->groupBy('answer')->get('answer') as $voted)
-                        <tr>
-                            <td>{{$voted->answer}}</td>
-                            <td>{{count(DB::table('votes')->where('answer', $voted->answer)->get())}}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+        <div class="row">
+            <div class="card m-auto">
+                <canvas id="voteChart" width="400" height="400" aria-label="Hello ARIA World" role="img"></canvas>
             </div>
-        @endif
+            <script>
+                let ctx = 'voteChart';
+                let labels = [];
+                let votes = [];
+                @foreach($poll->votes()->groupBy('answer')->get('answer') as $voted)
+                labels.push('{{$voted->answer}}');
+                votes.push('{{count(DB::table('votes')->where('answer', $voted->answer)->get())}}');
+                @endforeach
+                var myChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '# ψήφοι',
+                            data: votes,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            position: 'bottom',
+                            display: true,
+                            labels: {
+                                generateLabels: function(chart) {
+                                    var data = chart.data;
+                                    if (data.labels.length && data.datasets.length) {
+                                        return data.labels.map(function(label, i) {
+                                            var meta = chart.getDatasetMeta(0);
+                                            var ds = data.datasets[0];
+                                            var arc = meta.data[i];
+                                            var custom = arc && arc.custom || {};
+                                            var getValueAtIndexOrDefault = Chart.helpers.getValueAtIndexOrDefault;
+                                            var arcOpts = chart.options.elements.arc;
+                                            var fill = custom.backgroundColor ? custom.backgroundColor : getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
+                                            var stroke = custom.borderColor ? custom.borderColor : getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
+                                            var bw = custom.borderWidth ? custom.borderWidth : getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
+
+                                            // We get the value of the current label
+                                            var value = chart.config.data.datasets[arc._datasetIndex].data[arc._index];
+
+                                            return {
+                                                // Instead of `text: label,`
+                                                // We add the value to the string
+                                                text: "Απάντηση: "+label + " Ψήφοι: " + value,
+                                                fillStyle: fill,
+                                                strokeStyle: stroke,
+                                                lineWidth: bw,
+                                                hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                                                index: i
+                                            };
+                                        });
+                                    } else {
+                                        return [];
+                                    }
+                                }
+                            }
+                        },
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: "Συνολικά {{count($poll->votes)}} ψήφοι"
+                        },
+                    }
+                });
+            </script>
+        </div>
     @endif
 @endsection
