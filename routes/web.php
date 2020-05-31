@@ -15,16 +15,20 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+//resources
 Route::resource('user', 'UserController');
 Route::resource('poll','PollController');
 Route::resource('category','CategoryController');
 Route::resource('log','LogsController');
 Route::resource('vote','VoteController');
 
+//get
 Route::get('/voting/{id}', 'VoteController@vote')->name('vote.voting');
-
-Route::post('/createUsers', 'UserController@createUsers')->name('createUsers');
-
 Route::get('/createUsers', 'UserController@viewCreateUsers')->name('user.viewCreateUsers');
 Route::get('/', 'HomeController@index')->name('home');
+Route::patch('/togglePoll', 'PollController@togglePoll')->name('TogglePoll');
+
+//post
+Route::post('/createUsers', 'UserController@createUsers')->name('createUsers');
+
 

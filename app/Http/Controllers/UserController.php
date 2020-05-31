@@ -81,14 +81,14 @@ class UserController extends Controller {
         $i = 0;
         foreach ($request->email as $email) {
             $password = $passwords[rand(0, 4)];
-            User::create([
+            $user = User::create([
                 'name' => $request->name[$i],
                 'email' => $email,
                 'password' => Hash::make($password),
                 'role' => 2
 
             ]);
-            Mail::to($email)->send(new UsersCreated($email, $password));
+            Mail::to($email)->send(new UsersCreated($user, $password));
             $i++;
         }
 
@@ -176,7 +176,7 @@ class UserController extends Controller {
         }
 
         if ($request->send_email == 1) {
-            Mail::to($user->email)->send(new UsersCreated($user->email, $request->password));
+            Mail::to($user->email)->send(new UsersCreated($user, $request->password));
         }
         Log::create([
             'action' => 'Επεξεργασία χρήστη: ' . $user->email,

@@ -18,9 +18,12 @@
             </ul>
         </div>
     @endif
+
+    <!-- Edit Poll -->
     <form method="POST" action="{{route('poll.update', $poll->id)}}">
         <label for="question">{{__('Ερώτηση')}}</label>
-        <input type="text" name="question" class="form-control mb-3" value="{{$poll->question}}" id="question" required/>
+        <input type="text" name="question" class="form-control mb-3" value="{{$poll->question}}" id="question"
+               required/>
         <select name="category_id" class="form-control" required>
             @foreach($categories as $category)
                 <option @if($poll->category_id == $category->id) selected
@@ -32,6 +35,25 @@
         <input type="submit" class="my-3 btn btn-primary" name="submit" value="{{__('Αποθήκευση')}}"/>
     </form>
 
+    <!-- Close Poll -->
+    <form method="POST" class="mb-3" action="{{route('TogglePoll')}}"
+          @if(!$poll->isClosed) onsubmit="return confirm('Είστε σίγουροι ότι θέλετε να κλείσετε την ερώτηση και να σταλεί e-mail σε όλους με τα αποτελέσματα;');"@endif>
+        @method('PATCH')
+        @csrf
+        <input type="hidden" name="id" value="{{$poll->id}}"/>
+        <input type="hidden" name="isClosed" value="{{($poll->isClosed?0:1)}}"/>
+        <input type="submit" class="btn btn-outline-{{($poll->isClosed?'info':'danger')}}" name="submit"
+               value="{{($poll->isClosed?__('Άνοιγμα Ερώτησης'):__('Κλείσιμο Ερώτησης'))}}"/>
+        @if(!$poll->isClosed)
+            <button style="right: 15px; top: -5px;" type="button" class="btn btn-info"
+                    data-toggle="tooltip" data-html="true"
+                    title="Με το κλείσιμο της ερώτησης, θα σταλεί e-mail με τα αποτελέσματα σε <b>όλους</b> του ψηφοφόρους">
+                ?
+            </button>
+        @endif
+    </form>
+
+    <!-- Delete Poll -->
     <form method="POST" class="mb-3" action="{{route('poll.destroy', $poll->id)}}">
         @method('DELETE')
         @csrf
@@ -56,8 +78,7 @@
                         <tr>
                             <td>{{$vote->answer}}</td>
                             <td>{{$vote->created_at}}</td>
-                            <td><a class="btn btn-info" href="{{route('vote.edit', $vote->id)}}">{{__('Επεξεργασία')}}
-                            </td>
+                            <td><a class="btn btn-info" href="{{route('vote.edit', $vote->id)}}">{{__('Επεξεργασία')}}</td>
                         </tr>
                     @endforeach
                     </tbody>
