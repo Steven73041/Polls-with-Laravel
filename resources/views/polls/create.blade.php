@@ -19,13 +19,16 @@
         </div>
     @endif
     <form class="form-group" method="POST" action="{{route('poll.store')}}">
-        <input type="text" name="question" class="form-control" required/>
+        <label for="question">{{__('Ερώτηση')}}</label>
+        <input type="text" id="question" name="question" class="form-control" required/>
         @if(count($categories) > 0)
-            <select name="category_id" class="form-control mt-3" required>
+            <label for="category_id">{{__('Κατηγορία')}}</label>
+            <select data-tags="true" name="category_id" class="form-control mt-3" id="category_id" required>
                 @foreach($categories as $category)
                     <option value="{{$category->id}}">{{$category->name}}</option>
                 @endforeach
             </select>
+
         @endif
         @csrf
         <input type="submit" class="btn btn-primary mt-3" name="submit" value="{{__('Αποθήκευση')}}"/>

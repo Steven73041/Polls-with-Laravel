@@ -34,5 +34,6 @@ $(document).ready(function () {
         return false;
     });
 
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
+    $('select').select2();
 });

@@ -31,8 +31,8 @@
                                             <option value="{{$category->id}}">{{$category->name}}</option>
                                         @endforeach
                                     </select>
-                                    <button style="position: absolute; right: 15px; top: -5px;" type="button" class="btn btn-info" data-toggle="tooltip" data-html="true"
-                                            title="Με το πάτημα του <code>CTRL</code> μπορείτε να επιλέξετε <b>πολλές</b> επιλογές">
+                                    <button style="position: absolute; right: 15px; top: -5px;" type="button" data-toggle="tooltip" data-html="true"
+                                            title="Μπορείτε να επιλέξετε <b>πάνω από 1</b> κατηγορία">
                                         ?
                                     </button>
                                 @endif

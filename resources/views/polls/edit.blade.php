@@ -24,7 +24,8 @@
         <label for="question">{{__('Ερώτηση')}}</label>
         <input type="text" name="question" class="form-control mb-3" value="{{$poll->question}}" id="question"
                required/>
-        <select name="category_id" class="form-control" required>
+        <label for="category_id">{{__('Κατηγορία')}}</label>
+        <select name="category_id" id="category_id" class="form-control" required>
             @foreach($categories as $category)
                 <option @if($poll->category_id == $category->id) selected
                         @endif value="{{$category->id}}">{{$category->name}}</option>
@@ -45,8 +46,7 @@
         <input type="submit" class="btn btn-outline-{{($poll->isClosed?'info':'danger')}}" name="submit"
                value="{{($poll->isClosed?__('Άνοιγμα Ερώτησης'):__('Κλείσιμο Ερώτησης'))}}"/>
         @if(!$poll->isClosed)
-            <button style="right: 15px; top: -5px;" type="button" class="btn btn-info"
-                    data-toggle="tooltip" data-html="true"
+            <button type="button" data-toggle="tooltip" data-html="true"
                     title="Με το κλείσιμο της ερώτησης, θα σταλεί e-mail με τα αποτελέσματα σε <b>όλους</b> του ψηφοφόρους">
                 ?
             </button>
@@ -70,7 +70,14 @@
                     <tr>
                         <th scope="col">{{__('Απάντηση')}}</th>
                         <th scope="col">{{__('Ημερομηνία')}}</th>
-                        <th scope="col"></th>
+                        <th scope="col">
+                            @if($poll->isClosed)
+                                <button type="button" data-toggle="tooltip" data-html="true"
+                                        title="{{__('Η επεξεργασία δεν είναι δυνατή σε κλειστή ψηφοφορία καθώς τα αποτελέσματα έχουν καθοριστεί')}}">
+                                    ?
+                                </button>
+                            @endif
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -78,7 +85,12 @@
                         <tr>
                             <td>{{$vote->answer}}</td>
                             <td>{{$vote->created_at}}</td>
-                            <td><a class="btn btn-info" href="{{route('vote.edit', $vote->id)}}">{{__('Επεξεργασία')}}</td>
+                            <td>
+                                @if(!$poll->isClosed)
+                                    <a class="btn btn-info"
+                                       href="{{route('vote.edit', $vote->id)}}">{{__('Επεξεργασία')}}
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
