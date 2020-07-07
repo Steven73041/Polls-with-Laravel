@@ -23,7 +23,7 @@ $(document).ready(function () {
             $(this).parent().find('.form-group:last-of-type').remove();
             k--;
         } else {
-            alert("1 Χρήστης τουλάχιστον είναι υποχρεωτικός.");
+            alert("Πρέπει να δημιουργήσετε τουλάχιστον 1 χρήστη.");
         }
     });
 
